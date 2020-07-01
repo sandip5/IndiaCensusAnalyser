@@ -85,13 +85,13 @@ public class CensusAnalyser {
         return sortedStateCensusJson;
     }
     private void indiaCensusSort(Comparator<IndiaCensusCSV> censusComparator) {
-        for (int i = 0; i < censusCSVList.size(); i++) {
-            for (int j = 0; j < censusCSVList.size() - i - 1; j++) {
-                IndiaCensusCSV census1 = censusCSVList.get(j);
-                IndiaCensusCSV census2 = censusCSVList.get(j + 1);
+        for (int rowCounter = 0; rowCounter < censusCSVList.size(); rowCounter++) {
+            for (int columnCounter = 0; columnCounter < censusCSVList.size() - rowCounter - 1; columnCounter++) {
+                IndiaCensusCSV census1 = censusCSVList.get(columnCounter);
+                IndiaCensusCSV census2 = censusCSVList.get(columnCounter + 1);
                 if (censusComparator.compare(census1, census2) > 0) {
-                    censusCSVList.set(j, census2);
-                    censusCSVList.set(j + 1, census1);
+                    censusCSVList.set(columnCounter, census2);
+                    censusCSVList.set(columnCounter + 1, census1);
                 }
             }
         }
@@ -106,13 +106,40 @@ public class CensusAnalyser {
         return sortedStateCodeJson;
     }
     private void stateCodeSort(Comparator<IndiaStateCodeCSV> stateCodeComparator) {
-        for (int i = 0; i < stateCodeCSVList.size(); i++) {
-            for (int j = 0; j < stateCodeCSVList.size() - i - 1; j++) {
-                IndiaStateCodeCSV census1 = stateCodeCSVList.get(j);
-                IndiaStateCodeCSV census2 = stateCodeCSVList.get(j + 1);
+        for (int rowCounter = 0; rowCounter < stateCodeCSVList.size(); rowCounter++) {
+            for (int columnCounter = 0; columnCounter < stateCodeCSVList.size() - rowCounter - 1; columnCounter++) {
+                IndiaStateCodeCSV census1 = stateCodeCSVList.get(columnCounter);
+                IndiaStateCodeCSV census2 = stateCodeCSVList.get(columnCounter + 1);
                 if (stateCodeComparator.compare(census1, census2) > 0) {
-                    stateCodeCSVList.set(j, census2);
-                    stateCodeCSVList.set(j + 1, census1);
+                    stateCodeCSVList.set(columnCounter, census2);
+                    stateCodeCSVList.set(columnCounter + 1, census1);
+                }
+            }
+        }
+    }
+    public String getPopulationDensityWiseSortedCensusData() throws CensusAnalyserException {
+        if (censusCSVList == null || censusCSVList.size() == 0) {
+            throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.densityPerSqKm);
+        this.indiaCensusPopulationDensityWiseSort(censusComparator);
+        String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+        try (Writer writer = new FileWriter("PopulationDensityWiseSortedIndiaCensus.json")) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusCSVList, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sortedStateCensusJson;
+    }
+    private void indiaCensusPopulationDensityWiseSort(Comparator<IndiaCensusCSV> censusComparator) {
+        for (int rowCounter = 0; rowCounter < censusCSVList.size(); rowCounter++) {
+            for (int columnCounter = 0; columnCounter < censusCSVList.size() - rowCounter - 1; columnCounter++) {
+                IndiaCensusCSV census1 = censusCSVList.get(columnCounter);
+                IndiaCensusCSV census2 = censusCSVList.get(columnCounter + 1);
+                if (censusComparator.compare(census1, census2) < 0) {
+                    censusCSVList.set(columnCounter, census2);
+                    censusCSVList.set(columnCounter + 1, census1);
                 }
             }
         }
