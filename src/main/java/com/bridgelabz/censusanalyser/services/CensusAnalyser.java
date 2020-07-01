@@ -5,6 +5,7 @@ import OpenCSVBuilder_JAR.CSVBuilderFactory;
 import OpenCSVBuilder_JAR.ICSVBuilder;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
+import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -30,9 +31,9 @@ public class CensusAnalyser {
     }
 
     public int loadIndiaStateCode(String indiaCensusCSVFilePath) throws CensusAnalyserException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(indiaCensusCSVFilePath));) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(indiaCensusCSVFilePath))) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IndiaCensusCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
+            Iterator<IndiaStateCodeCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IndiaStateCodeCSV.class);
             return this.getCount(censusCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
