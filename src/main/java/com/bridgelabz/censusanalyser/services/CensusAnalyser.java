@@ -4,9 +4,12 @@ import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
 import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -73,6 +76,12 @@ public class CensusAnalyser {
         Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.population);
         this.indiaCensusSort(censusComparator);
         String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+        try (Writer writer = new FileWriter("PopulationWiseSortedIndiaCensus.json")) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusCSVList, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return sortedStateCensusJson;
     }
     private void indiaCensusSort(Comparator<IndiaCensusCSV> censusComparator) {
