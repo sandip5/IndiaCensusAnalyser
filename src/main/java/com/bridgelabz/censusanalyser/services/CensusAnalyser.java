@@ -122,7 +122,7 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.densityPerSqKm);
-        this.indiaCensusPopulationDensityWiseSort(censusComparator);
+        this.indiaCensusLargestToLeastSort(censusComparator);
         String sortedStateCensusJson = new Gson().toJson(censusCSVList);
         try (Writer writer = new FileWriter("PopulationDensityWiseSortedIndiaCensus.json")) {
             Gson gson = new GsonBuilder().create();
@@ -132,7 +132,22 @@ public class CensusAnalyser {
         }
         return sortedStateCensusJson;
     }
-    private void indiaCensusPopulationDensityWiseSort(Comparator<IndiaCensusCSV> censusComparator) {
+    public String getAreaWiseSortedCensusData() throws CensusAnalyserException {
+        if (censusCSVList == null || censusCSVList.size() == 0) {
+            throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<IndiaCensusCSV> censusComparator = Comparator.comparing(census -> census.areaInSqKm);
+        this.indiaCensusLargestToLeastSort(censusComparator);
+        String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+        try (Writer writer = new FileWriter("AreaWiseSortedIndiaCensus.json")) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusCSVList, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sortedStateCensusJson;
+    }
+    private void indiaCensusLargestToLeastSort(Comparator<IndiaCensusCSV> censusComparator) {
         for (int rowCounter = 0; rowCounter < censusCSVList.size(); rowCounter++) {
             for (int columnCounter = 0; columnCounter < censusCSVList.size() - rowCounter - 1; columnCounter++) {
                 IndiaCensusCSV census1 = censusCSVList.get(columnCounter);
@@ -144,4 +159,5 @@ public class CensusAnalyser {
             }
         }
     }
+
 }
