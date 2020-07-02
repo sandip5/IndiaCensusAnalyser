@@ -21,6 +21,7 @@ public class CensusAnalyserTest {
     private static final String WRONG_TYPE_INDIAN_STATE_CODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.txt";
     private static final String DELIMITER_PROBLEM_STATE_CODE_CSV_FILE_PATH = "./src/test/resources/DelimiterProblemIndiaStateCode.csv";
     private static final String HEADER_PROBLEM_STATE_CODE_CSV_FILE_PATH = "./src/test/resources/HeaderProblemIndiaStateCode.csv";
+    private static final String US_STATE_CENSUS_CSV_FILE_PATH = "./src/test/resources/US_STATE_CENSUS.csv";
 
 
     @Test
