@@ -4,6 +4,7 @@ import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
 import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
+import com.bridgelabz.censusanalyser.model.UsCensusCSV;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -65,7 +66,21 @@ public class CensusAnalyser {
         }
         return 0;
     }
-
+    public int loadUSCensusData(String csvFilePath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
+            censusHashMap = csvBuilder.getCSVFileMap(reader, UsCensusCSV.class);
+            return censusHashMap.size();
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (CSVBuilderException e) {
+            throw new CensusAnalyserException(e.getMessage(), e.type.name());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     /**
      * State Wise Sorting From India Census CSV File
      * @return sortedStateCensusJson
@@ -191,5 +206,29 @@ public class CensusAnalyser {
                         censusRecords.put(columnCounter + 1, census1);
                     }
                 }));
+    }
+
+    public String getPopulationWiseSortedUSCensusData() throws CensusAnalyserException {
+        if (censusHashMap == null || censusHashMap.size() == 0)
+            throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        Comparator<UsCensusCSV> censusComparator = Comparator.comparing(census -> census.usPopulation);
+        this.descendingSort(censusComparator, censusHashMap);
+        censusRecords = censusHashMap.values();
+        String sortedPopulationUSCensusJson = new Gson().toJson(censusRecords);
+        String fileName = "./src/test/resources/PopulationWiseSortedUSCensus.json";
+        this.writeIntoJson(fileName);
+        return sortedPopulationUSCensusJson;
+    }
+
+    public String getHouseingUnitWiseSortedUSCensusData() throws CensusAnalyserException {
+        if (censusHashMap == null || censusHashMap.size() == 0)
+            throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        Comparator<UsCensusCSV> censusComparator = Comparator.comparing(census -> census.housingUnits);
+        this.descendingSort(censusComparator, censusHashMap);
+        censusRecords = censusHashMap.values();
+        String sortedPopulationUSCensusJson = new Gson().toJson(censusRecords);
+        String fileName = "./src/test/resources/HousingUnitWiseSortedUSCensus.json";
+        this.writeIntoJson(fileName);
+        return sortedPopulationUSCensusJson;
     }
 }
