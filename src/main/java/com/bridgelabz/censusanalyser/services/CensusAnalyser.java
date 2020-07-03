@@ -219,4 +219,16 @@ public class CensusAnalyser {
         this.writeIntoJson(fileName);
         return sortedPopulationUSCensusJson;
     }
+
+    public String getHouseingUnitWiseSortedUSCensusData() throws CensusAnalyserException {
+        if (censusHashMap == null || censusHashMap.size() == 0)
+            throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        Comparator<UsCensusCSV> censusComparator = Comparator.comparing(census -> census.housingUnits);
+        this.descendingSort(censusComparator, censusHashMap);
+        censusRecords = censusHashMap.values();
+        String sortedPopulationUSCensusJson = new Gson().toJson(censusRecords);
+        String fileName = "./src/test/resources/HousingUnitWiseSortedUSCensus.json";
+        this.writeIntoJson(fileName);
+        return sortedPopulationUSCensusJson;
+    }
 }

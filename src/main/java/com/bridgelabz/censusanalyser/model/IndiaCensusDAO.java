@@ -6,7 +6,7 @@ public class IndiaCensusDAO {
     public int usPopulation;
     public String totalArea;
     public String stateId;
-    public String houseingUnits;
+    public int housingUnits;
     public int tin;
     public String stateName;
     public String stateCode;
@@ -31,7 +31,7 @@ public class IndiaCensusDAO {
     }
 
     public IndiaCensusDAO(UsCensusCSV usCensusCSV){
-        houseingUnits = usCensusCSV.housingUnits;
+        housingUnits = usCensusCSV.housingUnits;
         stateId = usCensusCSV.stateId;
         totalArea = usCensusCSV.totalArea;
         usPopulation = usCensusCSV.usPopulation;
