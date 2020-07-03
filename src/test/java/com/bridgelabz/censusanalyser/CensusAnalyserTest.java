@@ -252,4 +252,19 @@ public class CensusAnalyserTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenUSAndIndiaCensusData_WhenSortingPopulationWise_ShouldReturnMostPopulousState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadUSCensusData(US_STATE_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortedIndiaCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            String sortedUSCensusData = censusAnalyser.getPopulationWiseSortedUSCensusData();
+            UsCensusCSV[] censusCSV = new Gson().fromJson(sortedUSCensusData, UsCensusCSV[].class);
+            Assert.assertEquals(13680081, censusCSV[0].housingUnits);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
 }
