@@ -30,6 +30,7 @@ public class OpenCSVBuilder implements ICSVBuilder {
             map.put(count, ob);
             count++;
         }
+        System.out.println(map);
         return (HashMap<E, E>) map;
     }
 
