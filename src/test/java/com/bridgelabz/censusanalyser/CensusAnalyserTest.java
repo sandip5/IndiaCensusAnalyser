@@ -236,6 +236,7 @@ public class CensusAnalyserTest {
             censusAnalyser.loadUSCensusData(US_STATE_CENSUS_CSV_FILE_PATH);
             String sortedCensusData = censusAnalyser.getHousingUnitWiseSortedUSCensusData();
             UsCensusCSV[] censusCSV = new Gson().fromJson(sortedCensusData, UsCensusCSV[].class);
+            System.out.println(censusCSV[0].usState);
             Assert.assertEquals(13680081, censusCSV[0].housingUnits);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
@@ -254,15 +255,25 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenUSAndIndiaCensusData_WhenSortingPopulationWise_ShouldReturnMostPopulousState() {
+    public void givenUSCensusData_WhenSortingPopulationWise_ShouldReturnMostPopulousState() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadUSCensusData(US_STATE_CENSUS_CSV_FILE_PATH);
-            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
-            String sortedIndiaCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
             String sortedUSCensusData = censusAnalyser.getPopulationWiseSortedUSCensusData();
-            UsCensusCSV[] censusCSV = new Gson().fromJson(sortedUSCensusData, UsCensusCSV[].class);
-            Assert.assertEquals(13680081, censusCSV[0].housingUnits);
+            UsCensusCSV[] usCensusCSV = new Gson().fromJson(sortedUSCensusData, UsCensusCSV[].class);
+            Assert.assertEquals("California", usCensusCSV[0].usState);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenIndiaCensusData_WhenSortingPopulationWise_ShouldReturnMostPopulousState() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            String sortedIndiaCensusData = censusAnalyser.getPopulationWiseSortedCensusData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortedIndiaCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals("Uttar Paradesh", indiaCensusCSV[0].state);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
         }

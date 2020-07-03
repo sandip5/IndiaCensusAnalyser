@@ -4,7 +4,7 @@ import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
 import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
 import com.bridgelabz.censusanalyser.model.UsCensusCSV;
 
-public class IndiaCensusDAO {
+public class CensusDAO {
     public double waterArea;
     public String stateName;
     public int population;
@@ -16,21 +16,21 @@ public class IndiaCensusDAO {
     public int srNo;
     public int populationDensity;
 
-    public IndiaCensusDAO(IndiaCensusCSV indiaCensusCSV) {
+    public CensusDAO(IndiaCensusCSV indiaCensusCSV) {
         stateName = indiaCensusCSV.state;
         totalArea = indiaCensusCSV.areaInSqKm;
         populationDensity = indiaCensusCSV.densityPerSqKm;
         population = indiaCensusCSV.population;
     }
 
-    public IndiaCensusDAO(IndiaStateCodeCSV indiaStateCodeCSV){
+    public CensusDAO(IndiaStateCodeCSV indiaStateCodeCSV){
         srNo = indiaStateCodeCSV.srNo;
         stateName = indiaStateCodeCSV.stateName;
         stateCode = indiaStateCodeCSV.stateCode;
         tin = indiaStateCodeCSV.tin;
     }
 
-    public IndiaCensusDAO(UsCensusCSV usCensusCSV){
+    public CensusDAO(UsCensusCSV usCensusCSV){
         housingUnits = usCensusCSV.housingUnits;
         stateId = usCensusCSV.stateId;
         totalArea = usCensusCSV.totalArea;
