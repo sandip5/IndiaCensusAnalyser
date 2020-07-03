@@ -234,7 +234,7 @@ public class CensusAnalyserTest {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadUSCensusData(US_STATE_CENSUS_CSV_FILE_PATH);
-            String sortedCensusData = censusAnalyser.getHouseingUnitWiseSortedUSCensusData();
+            String sortedCensusData = censusAnalyser.getHousingUnitWiseSortedUSCensusData();
             UsCensusCSV[] censusCSV = new Gson().fromJson(sortedCensusData, UsCensusCSV[].class);
             Assert.assertEquals(13680081, censusCSV[0].housingUnits);
         } catch (CensusAnalyserException e) {
@@ -252,6 +252,4 @@ public class CensusAnalyserTest {
             e.printStackTrace();
         }
     }
-
-
 }
