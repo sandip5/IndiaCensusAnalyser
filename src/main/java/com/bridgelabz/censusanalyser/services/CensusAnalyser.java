@@ -27,9 +27,8 @@ public class CensusAnalyser {
 
     /**
      * Loading Census Data By Passing Path Of CSV File
-     *
      * @param csvFilePath
-     * @return Size Of Census CSV List
+     * @return Size Of Map
      * @throws CensusAnalyserException
      */
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
@@ -50,9 +49,8 @@ public class CensusAnalyser {
 
     /**
      * Loading State Code By Passing Path Of CSV File
-     *
      * @param indiaCensusCSVFilePath
-     * @return Size Of State Code CSV List
+     * @return Size Of Map
      * @throws CensusAnalyserException
      */
     public int loadIndiaStateCode(String indiaCensusCSVFilePath) throws CensusAnalyserException {
@@ -71,6 +69,12 @@ public class CensusAnalyser {
         return 0;
     }
 
+    /**
+     * Loading Us State Code By Passing Path Of CSV File
+     * @param csvFilePath
+     * @return Size Of Map
+     * @throws CensusAnalyserException
+     */
     public int loadUSCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
@@ -104,7 +108,6 @@ public class CensusAnalyser {
 
     /**
      * Population Wise Sorting From India Census CSV File
-     *
      * @return sortedPopulationCensusJson
      * @throws CensusAnalyserException
      */
@@ -121,7 +124,6 @@ public class CensusAnalyser {
 
     /**
      * Sorting Least To Largest Order For India Census CSV
-     *
      * @param censusComparator
      */
     private <E> void asscendingSort(Comparator<E> censusComparator, Map<Object, Object> censusRecords) {
@@ -138,7 +140,6 @@ public class CensusAnalyser {
 
     /**
      * State Wise Sorting From India State Code CSV File
-     *
      * @return sortedStateCodeJson
      * @throws CensusAnalyserException
      */
@@ -218,7 +219,6 @@ public class CensusAnalyser {
 
     /**
      * Sorting Population Wise From US Census Data
-     *
      * @return sortedPopulationUSCensusJson
      * @throws CensusAnalyserException
      */
