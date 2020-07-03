@@ -1,4 +1,4 @@
-package com.bridgelabz.censusanalyser.services;
+package com.bridgelabz.censusanalyser.utility;
 
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 
