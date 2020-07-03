@@ -242,4 +242,16 @@ public class CensusAnalyserTest {
         }
     }
 
+    @Test
+    public void givenUSCensusCSVFile_ReturnsCorrectRecords() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            int numOfRecords = censusAnalyser.loadUSCensusData(US_STATE_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(45, numOfRecords);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
