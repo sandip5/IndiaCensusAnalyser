@@ -14,12 +14,6 @@ public class OpenCSVBuilder implements ICSVBuilder {
         return this.getCSVBean(reader, csvClass).iterator();
     }
 
-    @Override
-    public <E> List<E> getCSVFileList(Reader reader, Class<E> csvClass) throws CSVBuilderException {
-        return this.getCSVBean(reader, csvClass).parse();
-    }
-
-
     private <E> CsvToBean<E> getCSVBean(Reader reader, Class<E> csvClass) throws CSVBuilderException {
         try {
             CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);

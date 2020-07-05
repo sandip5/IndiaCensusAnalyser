@@ -61,8 +61,8 @@ public class CensusAnalyser {
                 utils.ascendingSort(censusComparator);
                 break;
             case "StateCode":
-                Comparator<CensusDAO> stateCodeComparator = Comparator.comparing(census -> census.stateCode);
-                utils.ascendingSort(stateCodeComparator);
+                censusComparator = Comparator.comparing(census -> census.stateCode);
+                utils.ascendingSort(censusComparator);
                 break;
             case "PopulationDensity":
                 censusComparator = Comparator.comparing(census -> census.populationDensity);
