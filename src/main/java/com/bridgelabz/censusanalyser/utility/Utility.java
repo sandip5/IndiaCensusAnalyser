@@ -16,7 +16,6 @@ import static com.bridgelabz.censusanalyser.services.CensusLoader.censusList;
 public class Utility {
     /**
      * Sorting Least To Largest Order For India Census CSV
-     *
      * @param censusComparator
      */
     public void ascendingSort(Comparator<CensusDAO> censusComparator) {
