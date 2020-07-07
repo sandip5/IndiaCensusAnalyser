@@ -11,7 +11,7 @@ public class CensusAnalyserException extends Exception {
         CENSUS_FILE_PROBLEM,
         DELIMITER_HEADER_PROBLEM,
         NO_CENSUS_DATA,
-       INVALID_COUNTRY;
+        INVALID_COUNTRY, NO_DATA;
     }
 
     public ExceptionType type;

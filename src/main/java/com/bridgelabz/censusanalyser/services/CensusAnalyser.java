@@ -1,86 +1,111 @@
 package com.bridgelabz.censusanalyser.services;
 
+import com.bridgelabz.censusanalyser.adapter.CensusAdapterFactory;
 import com.bridgelabz.censusanalyser.dao.CensusDAO;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
-import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
-import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
-import com.bridgelabz.censusanalyser.model.UsCensusCSV;
-import com.bridgelabz.censusanalyser.utility.Utility;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.bridgelabz.censusanalyser.services.CensusLoader.censusList;
+import static com.bridgelabz.censusanalyser.adapter.CensusAdapter.censusList;
 
 public class CensusAnalyser {
+    Comparator<CensusDAO> censusComparator = null;
+    ArrayList censusDTO = null;
+
+    public CensusAnalyser() {
+    }
+
+    private Country country;
+
+    public CensusAnalyser(Country country) {
+        this.country = country;
+    }
+
     public enum Country {
         INDIA_CENSUS, INDIA_STATE, US_CENSUS
     }
 
-    CensusLoader loaderObject = new CensusLoader();
-    Utility utils = new Utility();
-
     /**
      * Load Census Data
-     * @param country
+     *
      * @param csvFilePath
      * @return
      * @throws CensusAnalyserException
      */
-    public List loadCensusData(Country country, String... csvFilePath) throws CensusAnalyserException {
-        switch (country) {
-            case INDIA_CENSUS:
-                return loaderObject.censusLoader(IndiaCensusCSV.class, csvFilePath);
-            case INDIA_STATE:
-                return loaderObject.censusLoader(IndiaStateCodeCSV.class, csvFilePath);
-            case US_CENSUS:
-                return loaderObject.censusLoader(UsCensusCSV.class, csvFilePath);
-            default:
-                throw new CensusAnalyserException("Invalid Country", CensusAnalyserException.ExceptionType.INVALID_COUNTRY);
-        }
+    public List loadCensusData(String... csvFilePath) throws CensusAnalyserException {
+        return new CensusAdapterFactory().getCensusData(country, csvFilePath);
     }
 
     /**
      * Get Sorted Data
+     *
      * @param sortBy
      * @param fileName
      * @return
      * @throws CensusAnalyserException
      */
     public String getSortedCensusData(String sortBy, String fileName) throws CensusAnalyserException {
-        utils.checkMap();
-        Comparator<CensusDAO> censusComparator = null;
+        if (censusList == null || censusList.size() == 0)
+            throw new CensusAnalyserException("No data", CensusAnalyserException.ExceptionType.NO_DATA);
         switch (sortBy) {
             case "Population":
                 censusComparator = Comparator.comparing(census -> census.population);
-                utils.ascendingSort(censusComparator);
+                censusDTO = this.ascendingSort();
                 break;
             case "StateName":
                 censusComparator = Comparator.comparing(census -> census.stateName);
-                utils.ascendingSort(censusComparator);
+                censusDTO = this.ascendingSort();
                 break;
             case "StateCode":
                 censusComparator = Comparator.comparing(census -> census.stateCode);
-                utils.ascendingSort(censusComparator);
+                censusDTO = this.ascendingSort();
                 break;
             case "PopulationDensity":
                 censusComparator = Comparator.comparing(census -> census.populationDensity);
-                utils.descendingSort(censusComparator);
+                censusDTO = this.descendingSort();
                 break;
             case "TotalArea":
                 censusComparator = Comparator.comparing(census -> census.totalArea);
-                utils.descendingSort(censusComparator);
+                censusDTO = this.descendingSort();
                 break;
             case "HousingUnits":
                 censusComparator = Comparator.comparing(census -> census.housingUnits);
-                utils.descendingSort(censusComparator);
+                censusDTO = this.descendingSort();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + sortBy);
         }
-        String sortedPopulationCensusJson = new Gson().toJson(censusList);
-        utils.writeIntoJson(fileName);
+        String sortedPopulationCensusJson = new Gson().toJson(censusDTO);
+        try (Writer writer = new FileWriter(fileName)) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(censusList, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return sortedPopulationCensusJson;
+    }
+
+    private ArrayList descendingSort() {
+        censusDTO = censusList.stream()
+                .sorted(censusComparator.reversed())
+                .map(censusDAO -> censusDAO.getCensusDTOS(country))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return censusDTO;
+    }
+
+    private ArrayList ascendingSort() {
+        censusDTO = censusList.stream()
+                .sorted(censusComparator)
+                .map(censusDAO -> censusDAO.getCensusDTOS(country))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return censusDTO;
     }
 }

@@ -5,7 +5,9 @@ public class CSVBuilderException extends Throwable {
         CENSUS_FILE_PROBLEM,
         DELIMITER_HEADER_PROBLEM
     }
+
     public ExceptionType type;
+
     public CSVBuilderException(String message, ExceptionType type) {
         super(message);
         this.type = type;
