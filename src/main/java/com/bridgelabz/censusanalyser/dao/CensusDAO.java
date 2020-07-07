@@ -1,8 +1,9 @@
 package com.bridgelabz.censusanalyser.dao;
 
-import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
-import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
-import com.bridgelabz.censusanalyser.model.UsCensusCSV;
+import com.bridgelabz.censusanalyser.dto.IndiaCensusCSV;
+import com.bridgelabz.censusanalyser.dto.IndiaStateCodeCSV;
+import com.bridgelabz.censusanalyser.dto.UsCensusCSV;
+import com.bridgelabz.censusanalyser.services.CensusAnalyser;
 
 public class CensusDAO {
     public double waterArea;
@@ -23,14 +24,14 @@ public class CensusDAO {
         population = indiaCensusCSV.population;
     }
 
-    public CensusDAO(IndiaStateCodeCSV indiaStateCodeCSV){
+    public CensusDAO(IndiaStateCodeCSV indiaStateCodeCSV) {
         srNo = indiaStateCodeCSV.srNo;
         stateName = indiaStateCodeCSV.stateName;
         stateCode = indiaStateCodeCSV.stateCode;
         tin = indiaStateCodeCSV.tin;
     }
 
-    public CensusDAO(UsCensusCSV usCensusCSV){
+    public CensusDAO(UsCensusCSV usCensusCSV) {
         housingUnits = usCensusCSV.housingUnits;
         stateId = usCensusCSV.stateId;
         totalArea = usCensusCSV.totalArea;
@@ -38,4 +39,28 @@ public class CensusDAO {
         stateName = usCensusCSV.usState;
         waterArea = usCensusCSV.waterArea;
     }
+
+    public Object getCensusDTOS(CensusAnalyser.Country country) {
+        if (country.equals(CensusAnalyser.Country.US_CENSUS))
+            return new UsCensusCSV(housingUnits, stateId, population, stateName, waterArea);
+        else if (country.equals(CensusAnalyser.Country.INDIA_CENSUS))
+            return new IndiaCensusCSV(stateName, totalArea, populationDensity, population);
+        return new IndiaStateCodeCSV(stateCode);
+    }
+
+    @Override
+    public String toString() {
+        return "CensusDAO{" +
+                "WaterArea'" + waterArea + '\'' +
+                "StateName='" + stateName + '\'' +
+                ", Population='" + population + '\'' +
+                ", TotalArea='" + totalArea + '\'' +
+                ", StateID='" + stateId + '\'' +
+                ", HousingUnits'" + housingUnits + '\'' +
+                ", TIN='" + tin + '\'' +
+                ", SrNo='" + srNo + '\'' +
+                ", PopulationDensity='" + populationDensity + '\'' +
+                '}';
+    }
+
 }
