@@ -83,14 +83,14 @@ public class CensusAnalyser {
             default:
                 throw new IllegalStateException("Unexpected value: " + sortBy);
         }
-        String sortedPopulationCensusJson = new Gson().toJson(censusDTO);
+        String sortedJSON = new Gson().toJson(censusDTO);
         try (Writer writer = new FileWriter(fileName)) {
             Gson gson = new GsonBuilder().create();
             gson.toJson(censusList, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sortedPopulationCensusJson;
+        return sortedJSON;
     }
 
     private ArrayList descendingSort() {

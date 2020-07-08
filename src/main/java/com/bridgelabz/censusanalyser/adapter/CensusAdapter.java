@@ -1,9 +1,9 @@
 package com.bridgelabz.censusanalyser.adapter;
 
 import com.bridgelabz.censusanalyser.dao.CensusDAO;
-import com.bridgelabz.censusanalyser.dto.IndiaCensusCSV;
-import com.bridgelabz.censusanalyser.dto.IndiaStateCodeCSV;
-import com.bridgelabz.censusanalyser.dto.UsCensusCSV;
+import com.bridgelabz.censusanalyser.model.IndiaCensusCSV;
+import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
+import com.bridgelabz.censusanalyser.model.UsCensusCSV;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.utility.CSVBuilderFactory;
@@ -21,7 +21,6 @@ public abstract class CensusAdapter {
     public abstract List loadCensusData(String... csvFilePath) throws CensusAnalyserException;
 
     public static List<CensusDAO> censusList = new ArrayList<>();
-
     /**
      * Loan Census Analyser CSV File
      *
